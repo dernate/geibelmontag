@@ -11,11 +11,12 @@
 		<meta property="og:type" content="website">
 
 		<script type="text/javascript">
+			var d_next_geibelmontag = null;
 			function show_geibelmontag() {
 				var current_date = new Date();
 				var current_year = current_date.getFullYear();
 				var current_month = current_date.getMonth()+1;
-				var d_next_geibelmontag = next_geibelmontag(current_date, current_year, current_month);
+				d_next_geibelmontag = next_geibelmontag(current_date, current_year, current_month);
 				
 				var options = { year: 'numeric', month: 'long', day: 'numeric' };
 				
@@ -37,28 +38,41 @@
 					return next_geibelmontag_date;
 				}
 			}
+			var countdown = setInterval(function() {
+				if(d_next_geibelmontag != null) {
+					var now = new Date().getTime();
+					var timeleft = d_next_geibelmontag - now;
+					var days = Math.floor(timeleft / (1000 * 60 * 60 * 24));
+					var hours = Math.floor((timeleft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+					var minutes = Math.floor((timeleft % (1000 * 60 * 60)) / (1000 * 60));
+					var seconds = Math.floor((timeleft % (1000 * 60)) / 1000);
+					
+					// Füge im <body> <div> Elemente hinzu, sodass d h m s nebeneinander ist
+					//document.getElementById("days").innerHTML = days + "d "
+					//document.getElementById("hours").innerHTML = hours + "h " 
+					//document.getElementById("mins").innerHTML = minutes + "m " 
+					//document.getElementById("secs").innerHTML = seconds + "s " 
+					if (timeleft < 0) {
+						//document.getElementById("days").innerHTML = ""
+						//document.getElementById("hours").innerHTML = "" 
+						//document.getElementById("mins").innerHTML = ""
+						//document.getElementById("secs").innerHTML = ""
+						//document.getElementById("end").innerHTML = "HEUTE ist Geibelmontag!";
+					}
+				}
+			}, 1000)
 		</script>
+	</head>
 
-  </head>
-
-  <body onload="show_geibelmontag();">
-
-    <!--<div class="row-fluid">
-
-      <div class="span11 text-center">
-        <img src="pizza-week.png" />
-        <h1>Jan 5-11, 2020</h1>
-      </div>
-
-    </div>-->
-
-    <div class="row-fluid">
-      <div class="offset3 span5 text-center">
-	      <div id="d_geibelmontag_date">
-		      <p id="geibelmontag_date">Nächster Geibelmontag:</p>
-	      </div>
-	    </div>
-    </div>
-
-  </body>
+	<body onload="show_geibelmontag();">
+		<div class="row-fluid">
+			<div class="offset3 span5 text-center">
+				<div id="d_geibelmontag_date">
+					<p id="geibelmontag_date">Nächster Geibelmontag:</p>
+				</div>
+			</div>
+		</div>
+		
+		<!-- Hier <div> für den Countdown hinzufügen, damit d h m s nebeneinander sind! -->
+	</body>
 </html>
