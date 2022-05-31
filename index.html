@@ -1,40 +1,47 @@
 <!DOCTYPE html>
 <html lang="de">
-  <head>
-    <meta charset="utf-8">
-    <title>Geibelmontag</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="">
-    <meta name="author" content="">
+	<head>
+		<meta charset="utf-8">
+		<title>Geibelmontag</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
 
-    <meta property="og:title" content="Geibelmontag">
+		<meta property="og:title" content="Geibelmontag">
 		<meta property="og:type" content="website">
 
-    <!-- Le styles -->
-    <link href="/css/bootstrap.css" rel="stylesheet">
-<link rel="stylesheet" href="/js/countdown/jquery.countdown.css">
-<link rel="stylesheet" href="/css/style.css">
-
-<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script type="text/javascript" src="//platform.twitter.com/widgets.js"></script>
-    <link href="/css/bootstrap-responsive.css" rel="stylesheet">
-
-
-    <script src="/js/countdown/jquery.countdown.js"></script>
-
-																	<script type="text/javascript">
-																	$(function () {
-																		var austDay = new Date();
-																		austDay = new Date(2020, 1 - 1, 5);
-																		$('#defaultCountdown').countdown({until: austDay});
-																		$('#year').text(austDay.getFullYear());
-																	});
-
-																	</script>
+		<script type="text/javascript">
+			function show_geibelmontag() {
+				var current_date = new Date();
+				var current_year = current_date.getFullYear();
+				var current_month = current_date.getMonth()+1;
+				var d_next_geibelmontag = next_geibelmontag(current_date, current_year, current_month);
+				
+				var options = { year: 'numeric', month: 'long', day: 'numeric' };
+				
+				document.getElementById("geibelmontag_date").innerHTML = "Nächster Geibelmontag: "+d_next_geibelmontag.toLocaleDateString("de-DE", options);
+			}
+			
+			function next_geibelmontag(current_date, year, month = 1) {
+				var next_geibelmontag_date = null;
+				for (i = month; i <= 12 && next_geibelmontag_date == null; i++) {
+					var d = new Date(i + "/16/" + year);
+					if (d.getDay() == 1 && current_date <= d) {
+						//Geibelmontag gefunden, der heute oder in der Zukunft liegt
+						next_geibelmontag_date = d;
+					}
+				}
+				if(next_geibelmontag_date == null) {
+					return next_geibelmontag(current_date, year+1);
+				} else {
+					return next_geibelmontag_date;
+				}
+			}
+		</script>
 
   </head>
 
-  <body style="background:#5EA5A4">
+  <body onload="show_geibelmontag();">
 
     <!--<div class="row-fluid">
 
@@ -46,7 +53,11 @@
     </div>-->
 
     <div class="row-fluid">
-      <div class="offset3 span5 text-center"><div id="defaultCountdown"></div></div>
+      <div class="offset3 span5 text-center">
+	      <div id="d_geibelmontag_date">
+		      <p id="geibelmontag_date">Nächster Geibelmontag:</p>
+	      </div>
+	    </div>
     </div>
 
   </body>
